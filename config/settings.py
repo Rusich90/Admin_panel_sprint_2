@@ -95,3 +95,34 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'custom_formatter': {
+            'format': '%(levelname)-10s %(name)-15s [%(asctime)s] : %(message)s'
+        }
+    },
+
+    'handlers': {
+        'console_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'custom_formatter',
+        },
+
+    },
+    'loggers': {
+        'app': {
+            'handlers': ['console_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['console_handler'],
+            'level': 'DEBUG',
+        },
+    },
+}
