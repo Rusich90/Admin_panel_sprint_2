@@ -1,0 +1,40 @@
+version: '3'
+
+volumes:
+  static_volume:
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - ~/volume/postgresql:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+  app:
+    build: .
+    depends_on:
+      - db
+    command: sh -c "
+      python manage.py wait_for_db &&
+      python manage.py runserver 0.0.0.0:8000"
+    expose:
+      - "8000"
+    volumes:
+      - .:/code
+      - static_volume:/code/static/
+    env_file:
+      - ./.env
+
+  nginx:
+    image: nginx:1.19.2
+    volumes:
+      - static_volume:/data/static/
+      - ./src/nginx.conf:/etc/nginx/nginx.conf
+      - ./src/configs:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - app
