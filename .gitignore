@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.DS_Store
 
 # C extensions
 *.so
@@ -50,4 +51,6 @@ ENV/
 
 # auto generated docs
 doc.html
+
+# local project dir
 postgresql
